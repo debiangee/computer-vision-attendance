@@ -1,0 +1,31 @@
+# Local Python environments and caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Editable-install/build artifacts
+*.egg-info/
+build/
+dist/
+
+# Local configuration and runtime databases
+.env
+.env.*
+!.env.example
+data/
+*.sqlite3
+*.sqlite3-wal
+*.sqlite3-shm
+
+# Local model assets and generated reports
+models/
+*.onnx
+*.pt
+*.pth
+
+# Session-only Kiro checkpoint
+.kiro/checkpoint.md

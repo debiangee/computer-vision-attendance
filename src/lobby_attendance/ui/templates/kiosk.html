@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lobby recognition</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='lobby.css') }}">
+</head>
+<body class="kiosk-shell">
+  <main class="kiosk-panel" aria-labelledby="kiosk-title">
+    <h1 id="kiosk-title">Lobby check-in</h1>
+    <p id="status-message" class="status neutral" role="status" aria-live="polite">Ready</p>
+    <div class="camera-frame" aria-label="Camera preview">
+      <video id="camera" autoplay muted playsinline></video>
+      <p id="camera-fallback" class="camera-fallback">Camera preview is not available.</p>
+    </div>
+    <p class="privacy-note">Recognition is limited to authorized enrolled people. No video is stored.</p>
+  </main>
+  <script src="{{ url_for('static', filename='kiosk.js') }}"></script>
+</body>
+</html>
