@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lobby administration</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='lobby.css') }}">
+</head>
+<body>
+  <main class="admin-shell">
+    <header class="page-header">
+      <div><p class="eyebrow">Authorized administration</p><h1>Lobby operations</h1></div>
+      <p class="warning">Prototype token boundary — replace with SSO before production.</p>
+    </header>
+    <section class="card auth-card" aria-labelledby="auth-title">
+      <h2 id="auth-title">Admin access</h2>
+      <label for="admin-token">Development admin token</label>
+      <input id="admin-token" type="password" autocomplete="off">
+      <button id="save-token" type="button">Use token in memory</button>
+      <p id="admin-status" class="status neutral" role="status" aria-live="polite">Token is not stored by this page.</p>
+    </section>
+    <section class="card demo-card" aria-labelledby="demo-title">
+      <p class="eyebrow">Executive demonstration</p>
+      <h2 id="demo-title">Executive demo enrollment</h2>
+      <p class="warning" role="note"><strong>Demo only:</strong> this uses a heuristic matcher and liveness check, is not production biometric readiness, and enrollment is lost when the server restarts. Enroll only a consenting, authorized participant.</p>
+      <p id="demo-status-message" class="status neutral" role="status" aria-live="polite">Enter an admin token to check demo readiness.</p>
+      <dl aria-label="Executive demo readiness">
+        <div><dt>Mode</dt><dd id="demo-status-enabled">Unknown</dd></div>
+        <div><dt>Readiness</dt><dd id="demo-status-state">Unknown</dd></div>
+        <div><dt>Compliance gate</dt><dd id="demo-status-compliance">Unknown</dd></div>
+        <div><dt>Liveness</dt><dd id="demo-status-liveness">Unknown</dd></div>
+        <div><dt>Templates in memory</dt><dd id="demo-status-templates">Unknown</dd></div>
+      </dl>
+      <div class="button-row">
+        <button id="demo-status-refresh" type="button">Refresh demo status</button>
+      </div>
+      <form id="demo-enrollment-form">
+        <label for="demo-user-id">Demo user ID</label>
+        <input id="demo-user-id" name="user_id" required maxlength="64" autocomplete="off" inputmode="text">
+        <label for="demo-display-name">Participant display name</label>
+        <input id="demo-display-name" name="display_name" required maxlength="200" autocomplete="name">
+        <p class="help-text">The server-attached webcam captures bounded enrollment samples. No browser camera or frames are used.</p>
+        <button id="demo-enroll" type="submit">Enroll consenting participant</button>
+      </form>
+      <form id="demo-reset-form">
+        <label for="demo-reset-user-id">Optional demo user ID to reset</label>
+        <input id="demo-reset-user-id" name="user_id" maxlength="64" autocomplete="off" inputmode="text">
+        <label><input id="demo-reset-confirm" type="checkbox"> I understand this suspends the demo user, retires active demo metadata, and preserves event history.</label>
+        <button id="demo-reset" type="submit" disabled>Reset demo enrollment</button>
+      </form>
+    </section>
+    <div class="admin-grid">
+      <section class="card" aria-labelledby="enrollment-title">
+        <h2 id="enrollment-title">Enrollment lifecycle</h2>
+        <form id="user-form">
+          <label for="user-id">User ID</label><input id="user-id" required>
+          <label for="display-name">Display name</label><input id="display-name" required>
+          <button type="submit">Create suspended user</button>
+        </form>
+        <form id="status-form" class="form-row">
+          <label for="status-user">User ID</label><input id="status-user" required>
+          <label for="user-status">Status</label>
+          <select id="user-status"><option>active</option><option>suspended</option><option>deactivated</option></select>
+          <button type="submit">Apply status</button>
+        </form>
+        <form id="role-form" class="form-row">
+          <label for="role-user">User ID</label><input id="role-user" required>
+          <label for="role">Role</label>
+          <select id="role"><option value="enrollment-administrator">Enrollment administrator</option><option value="attendance-administrator">Attendance administrator</option><option value="auditor">Auditor</option><option value="system-operator">System operator</option><option value="rbac-administrator">RBAC administrator</option></select>
+          <button type="submit">Assign role</button>
+        </form>
+        <details id="legacy-template-contract" class="legacy-contract">
+          <summary>Legacy metadata contract — not demo recognition</summary>
+          <p class="help-text">This form registers metadata only and cannot enroll a participant for executive demo recognition.</p>
+          <form id="template-form" class="form-row">
+            <label for="template-id">Template metadata ID</label><input id="template-id" required>
+            <label for="template-user">User ID</label><input id="template-user" required>
+            <label for="model-version">Model version</label><input id="model-version" required>
+            <label for="template-version">Template version</label><input id="template-version" required>
+            <label for="template-hash">Protected template hash</label><input id="template-hash" required autocomplete="off">
+            <button type="submit">Register metadata only</button>
+          </form>
+        </details>
+      </section>
+      <section class="card" aria-labelledby="queue-title">
+        <h2 id="queue-title">Offline queue</h2>
+        <pre id="queue-output">Not loaded</pre>
+        <div class="button-row"><button data-queue-action="queue">Refresh</button><button data-queue-action="synchronize">Synchronize</button><button data-queue-action="retry">Retry failed</button><button data-queue-action="expire">Expire old</button></div>
+      </section>
+    </div>
+    <section class="card" aria-labelledby="events-title"><h2 id="events-title">Recognition events</h2><button id="load-events" type="button">Load events</button><div id="events-output" class="table-wrap"></div></section>
+    <section class="card" aria-labelledby="audit-title"><h2 id="audit-title">Sanitized audit</h2><button id="load-audit" type="button">Load audit</button><div id="audit-output" class="table-wrap"></div></section>
+  </main>
+  <script src="{{ url_for('static', filename='admin.js') }}"></script>
+</body>
+</html>
